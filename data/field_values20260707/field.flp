@@ -1,0 +1,13 @@
+/ ! Title 
+'RAOC'  ! Option 
+999999   ! Mlimit (number of modes to include) 
+1        ! NProf  
+0.0 /    ! rProf (km) 
+    1 	 	 	 	 ! NRr 
+    10.000000  / 	 ! Rr(1)  ... (km) 
+    1 	 	 	 	 ! NSz 
+    46.000000  / 	 ! Sz(1)  ... (m) 
+   16 	 	 	 	 ! NRz 
+    13.984200      75.478000  / 	 ! Rz(1)  ... (m) 
+   16 	 	 	 	 ! NRro 
+      0.00        0.00  / 	 	 	 	 ! Rro(1)  ... (m) 
