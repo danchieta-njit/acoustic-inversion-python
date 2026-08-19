@@ -75,3 +75,25 @@ def wideband_pulse(pulse_duration, fs, bw, fc, window=sp.windows.hamming):
     # signal = signal / np.sum(signal)
 
     return signal
+
+
+def scramble_nums(x):
+    
+    c = np.array([-1, 0, 1])
+    x_out = np.empty(x.shape, dtype=np.int64)
+
+    for ind, num in enumerate(x):
+        mask = np.array([True,]*3)
+        if num == 0:
+            mask[0] = False
+        if ind > 0:
+            if x_out[ind-1] == num-1:
+                mask[0] = False
+            if x_out[ind-1] == num:
+                mask[1] = False
+            if x_out[ind-1] == num + 1:
+                mask[2] = False
+        
+        x_out[ind] = num + np.random.choice(c[mask])
+    
+    return x_out

@@ -1,6 +1,18 @@
 import numpy as np
 
 
+def arrival_times_from_peaks(peaks, f, deg=2):
+    coefs = np.array([np.polyfit(d[:,0], d[:,1], deg) for d in peaks])
+    return np.array([np.polyval(c, f) for c in coefs]) 
+ 
+
+# class GetArrivalTimes:
+    # def __init__(self, peaks):
+        # self.coefs = np.array([np.polyfit(d[:,0], d[:,1], 2) for d in peaks])
+    # def arrival_times(self, f):
+        # return np.array([np.polyval(c, f) for c in self.coefs]) 
+        
+
 def calculate_deltas(x):
     #if x.ndim == 2:
     #    x = x[np.newaxis,...]
@@ -14,6 +26,8 @@ def calculate_deltas(x):
     return delta
 
 def calculate_residual(data_arrival_times, replica_arrival_times):
+    # data_arrival_times: 2d ndarray nmodes x nfreqs
+    # replica_arrival_times: Nd ndarray bulk_parameters x nmodes x nfreqs
     replica_delta = calculate_deltas(replica_arrival_times)
     data_delta = calculate_deltas(data_arrival_times)
 
@@ -26,10 +40,11 @@ class AcousticInversionLikelihood:
 
     def likelihood_direct(self, replica_arrival_times, sigma = 1):
         residual = self.data_arrival_times - replica_arrival_times
+        print(residual.shape)
 
-        return np.exp(-np.sum(np.linalg.norm(residual, 2,2)**2,1)/2/sigma**2)
+        return np.exp(-np.sum(np.linalg.norm(residual, 2,-1)**2,-1)/2/sigma**2)
 
-    def likelihood_intramodal(self, replica_arrival_times):
+    def likelihood_intermodal(self, replica_arrival_times):
         residual = calculate_residual(self.data_arrival_times.mT,
                                       replica_arrival_times.mT)
         
@@ -42,9 +57,9 @@ class AcousticInversionLikelihood:
         return np.exp(-np.linalg.norm(residual, 2, -3)**2)
 
     def likelihood(self, replica_arrival_times, sigma = 1):
-        residual_intra = calculate_residual(self.data_arrival_times.mT,
+        residual_inter = calculate_residual(self.data_arrival_times.mT,
                                             replica_arrival_times.mT)
-        residual_inter = calculate_residual(self.data_arrival_times,
+        residual_intra = calculate_residual(self.data_arrival_times,
                                             replica_arrival_times)
         
         return np.exp(-(
