@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def arrival_times_from_peaks(peaks, f, deg=2):
     coefs = np.array([np.polyfit(d[:,0], d[:,1], deg) for d in peaks])
     return np.array([np.polyval(c, f) for c in coefs]) 

@@ -17,7 +17,8 @@ def nonlinear_warping(y, fs, tr, t0 = None):
 
     fsh = 2/deltatn
     
-    K = np.ceil((warping_ifun(tmax, tr) - warping_ifun(tmin, tr)) * fsh)
+    # K = np.ceil((warping_ifun(tmax, tr) - warping_ifun(tmin, tr)) * fsh)
+    K = np.ceil(warping_ifun(tmax, tr) * fsh)
 
     tw = np.arange(K)/fsh# + warping_ifun(tmin, tr)
 
